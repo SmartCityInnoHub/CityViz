@@ -4,6 +4,7 @@
 #include "Engine/World.h"
 #include "Kismet/GameplayStatics.h"
 #include "UObject/ConstructorHelpers.h"
+#include "Materials/MaterialInstance.h"
 #include "EngineUtils.h"
 
 // Sets default values
@@ -18,10 +19,14 @@ AActiveElement::AActiveElement()
 	RootMesh->SetCollisionProfileName(TEXT("ActiveElement"));
 	RootMesh->bRenderCustomDepth = false;
 	RootMesh->CustomDepthStencilValue = 0;
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> Mesh(TEXT("/Engine/BasicShapes/Cube"));
+	if (Mesh.Succeeded()) {
+		RootMesh->SetStaticMesh(Mesh.Object);
+	}
 	RootComponent = RootMesh;
 
 	PostProcessComponent = CreateDefaultSubobject<UPostProcessComponent>(TEXT("PostProcess"));
-	static ConstructorHelpers::FObjectFinder<UMaterial> Material(TEXT("Material'/Game/vendor/PP_Outliner_Inst'"));
+	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Material(TEXT("MaterialInstanceConstant'/Game/vendor/PP_Outliner_Inst'"));
 	if (Material.Object) {
 		PostProcessComponent->AddOrUpdateBlendable(Material.Object);
 		PostProcessComponent->SetupAttachment(RootComponent);
