@@ -16,6 +16,8 @@ class CITYVIZ_API UUserPostWidget : public UUserWidget
 	GENERATED_BODY()
 
 public:
+	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Widget content")
 		FString UserName;
 
@@ -25,4 +27,11 @@ public:
 	UPROPERTY(EditAnyWhere, BluePrintReadWrite, Category = "Widget content")
 		UImage* Image;
 	
+	UPROPERTY(EditAnywhere, BluePrintReadWrite, Category = "Settings")
+		float DisplayTime;
+
+	bool IsExpire;
+
+protected:
+	float displayTimePassed;
 };

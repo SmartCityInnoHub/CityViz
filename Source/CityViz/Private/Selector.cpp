@@ -12,7 +12,7 @@ ASelector::ASelector()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	static ConstructorHelpers::FClassFinder<UInfoWindow> WidgetAsset(TEXT("/Game/BPInfoWindow"));
+	static ConstructorHelpers::FClassFinder<UInfoWindow> WidgetAsset(TEXT("/Game/UserWidget/BPInfoWindow"));
 	if (WidgetAsset.Succeeded())
 	{
 		WidgetClass = WidgetAsset.Class;

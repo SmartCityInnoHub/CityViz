@@ -24,5 +24,5 @@ public:
 		FString Content;
 	
 	UPROPERTY(EditAnyWhere, BluePrintReadWrite, Category = "Simple Window Widget", meta = (AllowPrivateAccess = "true"))
-	ESlateVisibility InfoWindowVisibility;
+		ESlateVisibility InfoWindowVisibility;
 };
