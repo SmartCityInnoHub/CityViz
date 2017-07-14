@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "UserPostWidget.h"
+#include "Components/WidgetComponent.h"
 #include "PostFeeder.generated.h"
 
 UCLASS()
@@ -36,8 +37,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Settings")
 	TSubclassOf<class UUserWidget> UserPostWidgetClass;
 	
-	TArray<UUserPostWidget*> AllWidgets;
+	TArray<UWidgetComponent *> AllWidgets;
 
+	UPROPERTY(EditAnyWhere, BluePrintReadWrite, Category = "Data")
 	//TODO:Convert to post data structure later
 	TArray<FString> PostChannel;
 };
