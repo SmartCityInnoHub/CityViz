@@ -35,35 +35,36 @@ void APostFeeder::Tick(float DeltaTime)
 
 	drainTimeCount += DeltaTime;
 	if (drainTimeCount > ChannelDrainInterval){
-		if (PostChannel.Num() > 0 && AllWidgets.Num() < DisplayLimit){
-			float x = FMath::RandRange(-100.f, 100.f);
-			float y = FMath::RandRange(-100.f, 100.f);
-			ShowPostWidget(PostChannel[0], FVector(x,y,0));
-			PostChannel.RemoveAt(0);
-		}
-		else {
-			UE_LOG(LogTemp, Warning, TEXT("Display reach limit no more widget"));
-		}
+		ShowPostWidget();
+		
 		drainTimeCount = 0;
 	}
+
+	for (int i = 0; i < AllWidgets.Num(); i++) {
+		AdjustWidgetAngle(i);
+		RemoveExpiredPostWidget(i);
+	}
+
 }
 
-void APostFeeder::ShowPostWidget(FString message, FVector position){
-	if(UserPostWidgetClass){
+void APostFeeder::ShowPostWidget(){
+	if(UserPostWidgetClass && PostChannel.Num() > 0 && AllWidgets.Num() < DisplayLimit){
 		UUserPostWidget* w = CreateWidget<UUserPostWidget>(
 			GetWorld()->GetFirstPlayerController(),
 			UserPostWidgetClass
 		);
 		if (w) {
-			w->Message = message;
-			w->UserName = message;
+			float x = FMath::RandRange(-100.f, 100.f);
+			float y = FMath::RandRange(-100.f, 100.f);
+			w->Message = PostChannel[0];
+			w->UserName = PostChannel[0];
+			w->DisplayTime = 5.f;
 			UE_LOG(LogTemp, Warning, TEXT("count %d"), AllWidgets.Num())
 			UWidgetComponent * widget = NewObject<UWidgetComponent>(this, UWidgetComponent::StaticClass());
 			widget->SetWidgetSpace(EWidgetSpace::World);
 			widget->SetOwnerPlayer(GetWorld()->GetFirstLocalPlayerFromController());
-			widget->SetWorldLocation(position);
+			widget->SetWorldLocation(FVector(x,y,0));
 			widget->SetPivot(FVector2D(0.5f, 0.5f));
-			widget->SetWidgetClass(UUserPostWidget::StaticClass());
 			widget->SetWidget(w);
 			widget->SetVisibility(true);
 			widget->SetTwoSided(true);
@@ -71,16 +72,23 @@ void APostFeeder::ShowPostWidget(FString message, FVector position){
 			widget->RegisterComponent();
 			AllWidgets.Add(widget);
 		}
+		PostChannel.RemoveAt(0);
 	}
 }
 
-void APostFeeder::RemovePostWidget(UUserPostWidget* widget){
-	for (int i = 0; i < AllWidgets.Num(); i++) {
-		UUserPostWidget* upwg = (UUserPostWidget*)AllWidgets[i]->GetUserWidgetObject();
-		UE_LOG(LogTemp, Warning, TEXT("%s"), upwg->IsExpire ? "true" : "false");
-		if (upwg -> IsExpire) {
-			AllWidgets[i]->DestroyComponent();
-			AllWidgets.RemoveAt(i);
-		}
+void APostFeeder::RemoveExpiredPostWidget(int i){
+	UUserPostWidget* upwg = (UUserPostWidget*)AllWidgets[i]->GetUserWidgetObject();
+	if (upwg->IsExpire) {
+		AllWidgets[i]->DestroyComponent();
+		AllWidgets.RemoveAt(i);
 	}
+}
+
+void APostFeeder::AdjustWidgetAngle(int i) {
+	FVector cameraPosition = GetWorld()->GetFirstPlayerController()->PlayerCameraManager->GetCameraLocation();
+	FVector componentPosition = AllWidgets[i]->GetComponentLocation();
+	FVector lookDirection = cameraPosition - componentPosition;
+	FRotator rotator = lookDirection.Rotation();
+	AllWidgets[i]->AddLocalRotation(AllWidgets[i]->GetComponentRotation().GetInverse());
+	AllWidgets[i]->AddLocalRotation(rotator);
 }

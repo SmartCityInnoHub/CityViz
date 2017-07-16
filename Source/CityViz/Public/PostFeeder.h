@@ -25,8 +25,9 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	virtual void ShowPostWidget(FString message, FVector position);
-	virtual void RemovePostWidget(UUserPostWidget* widget);
+	virtual void ShowPostWidget();
+	virtual void RemoveExpiredPostWidget(int i);
+	virtual void AdjustWidgetAngle(int i);
 
 	UPROPERTY(EditAnywhere, Category = "Settings")
 	int DisplayLimit;

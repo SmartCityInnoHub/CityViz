@@ -146,4 +146,9 @@ Intermediate/*
 
 # Cache files for the editor to use
 
-DerivedDataCache/*
+DerivedDataCache/
+
+# Plugin generated
+plugins/StreetMap/Binaries/*
+plugins/StreetMap/Intermediate/*
+*
