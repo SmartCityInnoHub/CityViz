@@ -2,10 +2,3 @@
 
 #include "UserPostWidget.h"
 
-void UUserPostWidget::NativeTick(const FGeometry& geom, float deltaTime){
-    Super::NativeTick(geom, deltaTime);
-    displayTimePassed += deltaTime;
-    if (displayTimePassed > DisplayTime){
-        IsExpire = true;
-    }
-}

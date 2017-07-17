@@ -4,8 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "UserPostWidget.h"
-#include "Components/WidgetComponent.h"
+#include "UserPost.h"
 #include "PostFeeder.generated.h"
 
 UCLASS()
@@ -26,21 +25,17 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	virtual void ShowPostWidget();
-	virtual void RemoveExpiredPostWidget(int i);
-	virtual void AdjustWidgetAngle(int i);
 
 	UPROPERTY(EditAnywhere, Category = "Settings")
-	int DisplayLimit;
+	float PostLifeSpan;
 
 	UPROPERTY(EditAnywhere, Category = "Settings")
 	float ChannelDrainInterval;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Settings")
 	TSubclassOf<class UUserWidget> UserPostWidgetClass;
-	
-	TArray<UWidgetComponent *> AllWidgets;
 
-	UPROPERTY(EditAnyWhere, BluePrintReadWrite, Category = "Data")
 	//TODO:Convert to post data structure later
+	UPROPERTY(EditAnyWhere, BluePrintReadWrite, Category = "Data")
 	TArray<FString> PostChannel;
 };

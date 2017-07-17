@@ -12,7 +12,6 @@ APostFeeder::APostFeeder()
 
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("SceneComp"));
 	ChannelDrainInterval = 1.f;
-	DisplayLimit = 3;
 
 	static ConstructorHelpers::FClassFinder<UUserPostWidget> WidgetAsset(TEXT("/Game/UserWidget/UWGUserPost"));
 	if (WidgetAsset.Succeeded())
@@ -36,59 +35,25 @@ void APostFeeder::Tick(float DeltaTime)
 	drainTimeCount += DeltaTime;
 	if (drainTimeCount > ChannelDrainInterval){
 		ShowPostWidget();
-		
-		drainTimeCount = 0;
-	}
 
-	for (int i = 0; i < AllWidgets.Num(); i++) {
-		AdjustWidgetAngle(i);
-		RemoveExpiredPostWidget(i);
+		drainTimeCount = 0;
 	}
 
 }
 
 void APostFeeder::ShowPostWidget(){
-	if(UserPostWidgetClass && PostChannel.Num() > 0 && AllWidgets.Num() < DisplayLimit){
-		UUserPostWidget* w = CreateWidget<UUserPostWidget>(
-			GetWorld()->GetFirstPlayerController(),
-			UserPostWidgetClass
-		);
-		if (w) {
-			float x = FMath::RandRange(-100.f, 100.f);
-			float y = FMath::RandRange(-100.f, 100.f);
-			w->Message = PostChannel[0];
-			w->UserName = PostChannel[0];
-			w->DisplayTime = 5.f;
-			UE_LOG(LogTemp, Warning, TEXT("count %d"), AllWidgets.Num())
-			UWidgetComponent * widget = NewObject<UWidgetComponent>(this, UWidgetComponent::StaticClass());
-			widget->SetWidgetSpace(EWidgetSpace::World);
-			widget->SetOwnerPlayer(GetWorld()->GetFirstLocalPlayerFromController());
-			widget->SetWorldLocation(FVector(x,y,0));
-			widget->SetPivot(FVector2D(0.5f, 0.5f));
-			widget->SetWidget(w);
-			widget->SetVisibility(true);
-			widget->SetTwoSided(true);
-			widget->AttachToComponent(RootComponent, FAttachmentTransformRules(EAttachmentRule::KeepWorld, true), TEXT("PostWidget"));
-			widget->RegisterComponent();
-			AllWidgets.Add(widget);
-		}
+	if(UserPostWidgetClass && PostChannel.Num() > 0){
+
+		//TODO:use location data contained in message
+		float x = FMath::RandRange(-100.f, 100.f);
+		float y = FMath::RandRange(-100.f, 100.f);
+
+		AUserPost* actor = GetWorld()->SpawnActor<AUserPost>(FVector(x, y, 0), FRotator::ZeroRotator);
+		actor->SetPostMessage(PostChannel[0]);
+		actor->SetLifeSpan(PostLifeSpan);
+		actor->SetPostUser(TEXT("not assigned yet"));
+
 		PostChannel.RemoveAt(0);
 	}
 }
 
-void APostFeeder::RemoveExpiredPostWidget(int i){
-	UUserPostWidget* upwg = (UUserPostWidget*)AllWidgets[i]->GetUserWidgetObject();
-	if (upwg->IsExpire) {
-		AllWidgets[i]->DestroyComponent();
-		AllWidgets.RemoveAt(i);
-	}
-}
-
-void APostFeeder::AdjustWidgetAngle(int i) {
-	FVector cameraPosition = GetWorld()->GetFirstPlayerController()->PlayerCameraManager->GetCameraLocation();
-	FVector componentPosition = AllWidgets[i]->GetComponentLocation();
-	FVector lookDirection = cameraPosition - componentPosition;
-	FRotator rotator = lookDirection.Rotation();
-	AllWidgets[i]->AddLocalRotation(AllWidgets[i]->GetComponentRotation().GetInverse());
-	AllWidgets[i]->AddLocalRotation(rotator);
-}
