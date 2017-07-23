@@ -12,35 +12,36 @@ ACar::ACar()
 	PrimaryActorTick.bCanEverTick = true;
 
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("SceneComp"));
+	Root = RootComponent;
 
 	UStaticMeshComponent* Body = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Body"));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> Mesh(TEXT("/Game/Mesh/Car/free_cartoon_cars_pickup02"));
 	if (Mesh.Succeeded()) {
 		Body->SetStaticMesh(Mesh.Object);
-		Body->AttachTo(RootComponent);
+		Body->AttachToComponent(RootComponent, FAttachmentTransformRules(EAttachmentRule::KeepRelative, false));
 	}
 
 	UStaticMeshComponent* Wheel3 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Wheel3"));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> Mesh2(TEXT("/Game/Mesh/Car/free_cartoon_cars_pickup02_wheel3_001"));
 	if (Mesh2.Succeeded()) {
 		Wheel3->SetStaticMesh(Mesh2.Object);
-		Wheel3->AttachTo(RootComponent);
+		Wheel3->AttachToComponent(RootComponent, FAttachmentTransformRules(EAttachmentRule::KeepRelative, false));
 	}
 
 	UStaticMeshComponent* Wheel2 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Wheel2"));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> Mesh3(TEXT("/Game/Mesh/Car/free_cartoon_cars_pickup02_wheel2_001"));
 	if (Mesh3.Succeeded()) {
 		Wheel2->SetStaticMesh(Mesh3.Object);
-		Wheel2->AttachTo(RootComponent);
+		Wheel2->AttachToComponent(RootComponent, FAttachmentTransformRules(EAttachmentRule::KeepRelative, false));
 	}
 
 	UStaticMeshComponent* Wheel1 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Wheel1"));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> Mesh4(TEXT("/Game/Mesh/Car/free_cartoon_cars_pickup02_wheel1_001"));
 	if (Mesh4.Succeeded()) {
 		Wheel1->SetStaticMesh(Mesh4.Object);
-		Wheel1->AttachTo(RootComponent);
+		Wheel1->AttachToComponent(RootComponent, FAttachmentTransformRules(EAttachmentRule::KeepRelative, false));
 	}
-	
+
 	CurrentWayPointIndex = 1;
 }
 

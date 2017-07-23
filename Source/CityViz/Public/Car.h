@@ -32,6 +32,6 @@ public:
 	float Velocity;
 
 	int CurrentWayPointIndex;
-
-	
+	FVector Offset;
+	USceneComponent* Root;
 };
