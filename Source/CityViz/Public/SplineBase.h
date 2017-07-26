@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Classes/Components/SplineComponent.h"
+#include "Classes/Components/StaticMeshComponent.h"
+#include "Classes/Materials/MaterialInstanceConstant.h"
 #include "SplineBase.generated.h"
 
 UCLASS()
@@ -27,4 +29,9 @@ public:
 	UPROPERTY(EditAnywhere)
 		USplineComponent* SplinePath;
 	
+	UPROPERTY(EditAnywhere)
+		UStaticMesh * Mesh;
+
+	UPROPERTY(EditAnywhere)
+		UMaterialInstanceConstant* Material;
 };
