@@ -48,7 +48,7 @@ void APostFeeder::ShowPostWidget(){
 		float x = FMath::RandRange(-100.f, 100.f);
 		float y = FMath::RandRange(-100.f, 100.f);
 
-		AUserPost* actor = GetWorld()->SpawnActor<AUserPost>(FVector(x, y, 0), FRotator::ZeroRotator);
+		AUserPost* actor = GetWorld()->SpawnActor<AUserPost>(FVector(x, y, WidgetZ), FRotator::ZeroRotator);
 		actor->SetPostMessage(PostChannel[0]);
 		actor->SetLifeSpan(PostLifeSpan);
 		actor->SetPostUser(TEXT("not assigned yet"));

@@ -35,5 +35,4 @@ public:
 
 	UWidgetComponent* PostWidgetComponent;
 	UUserPostWidget* Widget;
-	float LifeTime;
 };

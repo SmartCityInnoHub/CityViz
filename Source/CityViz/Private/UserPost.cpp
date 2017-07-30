@@ -42,7 +42,6 @@ void AUserPost::BeginPlay()
 		PostWidgetComponent = widget;
 		Widget = w;
 	}
-	
 }
 
 // Called every frame
@@ -58,6 +57,7 @@ void AUserPost::LookAtScreen()
 	FVector cameraPosition = GetWorld()->GetFirstPlayerController()->PlayerCameraManager->GetCameraLocation();
 	FVector lookDirection = cameraPosition - GetActorLocation();
 	FRotator rotator = lookDirection.Rotation();
+	rotator.Pitch = 0.f;
 	SetActorRotation(rotator);
 }
 
