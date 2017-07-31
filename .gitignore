@@ -151,3 +151,6 @@ DerivedDataCache/
 # Plugin generated
 plugins/StreetMap/Binaries/*
 plugins/StreetMap/Intermediate/*
+
+# DownTown
+Content/DownTown/*
