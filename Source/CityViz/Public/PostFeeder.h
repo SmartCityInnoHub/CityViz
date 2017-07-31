@@ -32,6 +32,9 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Settings")
 	float ChannelDrainInterval;
 
+	UPROPERTY(EditAnywhere, Category = "Settings")
+	float WidgetZ;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Settings")
 	TSubclassOf<class UUserWidget> UserPostWidgetClass;
 
