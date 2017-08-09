@@ -3,11 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Infoable.h"
 #include "GameFramework/Actor.h"
 #include "GameFramework/PlayerController.h"
-#include "InfoWindow.h"
-#include "Runtime/UMG/Public/Blueprint/UserWidget.h"
-#include "ActiveElement.h"
 #include "Selector.generated.h"
 
 UCLASS()
@@ -27,12 +25,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Widgets")
-		TSubclassOf<class UUserWidget> WidgetClass;
-
-	UInfoWindow* InfoWindow;
-
 	APlayerController *controller;
-	AActiveElement *CurrentActiveElement;
+	IInfoable* CurrentActiveElement;
 	
 };

@@ -66,7 +66,7 @@ void AActiveElement::SetupActor() {
 	RootComponent = RootMesh;
 
 	PostProcessComponent = CreateDefaultSubobject<UPostProcessComponent>(TEXT("PostProcess"));
-	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Material(TEXT("MaterialInstanceConstant'/Game/Meterial/Outline/PP_Outliner_Inst'"));
+	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Material(TEXT("MaterialInstanceConstant'/Game/Materials/Outline/PP_Outliner_Inst.PP_Outliner_Inst'"));
 	if (Material.Object) {
 		PostProcessComponent->AddOrUpdateBlendable(Material.Object);
 		PostProcessComponent->SetupAttachment(RootComponent);
