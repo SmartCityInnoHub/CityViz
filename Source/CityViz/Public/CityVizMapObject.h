@@ -34,6 +34,10 @@ protected:
 		void ShowInfo();
 		virtual void ShowInfo_Implementation() override;
 
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+		void HideInfo();
+		virtual void HideInfo_Implementation() override;
+
 public:
 	//TArray<IInfoRenderer> InfoRenderers;
 	//Enum InfoMode;

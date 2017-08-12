@@ -30,4 +30,7 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 		void ShowInfo();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+		void HideInfo();
 };

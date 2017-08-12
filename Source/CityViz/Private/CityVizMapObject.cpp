@@ -57,3 +57,7 @@ void ACityVizMapObject::Deactivate_Implementation() {
 void ACityVizMapObject::ShowInfo_Implementation() {
 	UE_LOG(LogTemp, Warning, TEXT("Show info implementation"))
 }
+
+void ACityVizMapObject::HideInfo_Implementation() {
+	UE_LOG(LogTemp, Warning, TEXT("Hide info implementation"))
+}

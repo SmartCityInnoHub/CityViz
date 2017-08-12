@@ -53,6 +53,7 @@ void ASelector::Tick(float DeltaTime)
 	else {
 		if (CurrentActiveElement != nullptr) {
 			CurrentActiveElement->Execute_Deactivate(Cast<AActor>(CurrentActiveElement));
+			CurrentActiveElement->Execute_HideInfo(Cast<AActor>(CurrentActiveElement));
 			CurrentActiveElement = nullptr;
 		}
 	}
