@@ -13,8 +13,10 @@ ACityVizMapObject::ACityVizMapObject()
 	PrimaryActorTick.bCanEverTick = false;
 
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
+	RootComponent->Mobility = EComponentMobility::Static;
 	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	MeshComponent->SetCollisionProfileName(TEXT("ActiveElement"));
+	MeshComponent->Mobility = EComponentMobility::Static;
 
 	auto PostProcessComponent = CreateDefaultSubobject<UPostProcessComponent>(TEXT("PostProcess"));
 	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Material(TEXT("MaterialInstanceConstant'/Game/Materials/Outline/PP_Outliner_Inst.PP_Outliner_Inst'"));

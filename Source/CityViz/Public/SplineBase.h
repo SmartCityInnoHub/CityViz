@@ -20,6 +20,7 @@ public:
 
 protected:
 	// Called when the game starts or when spawned
+	virtual void OnConstruction(const FTransform& transform) override;
 	virtual void BeginPlay() override;
 
 public:	
@@ -34,4 +35,7 @@ public:
 
 	UPROPERTY(EditAnywhere)
 		UMaterialInstanceConstant* Material;
+
+	UPROPERTY(EditAnywhere)
+		TArray<FVector> SplinePoints;
 };

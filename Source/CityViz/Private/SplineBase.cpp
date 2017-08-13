@@ -11,9 +11,6 @@ ASplineBase::ASplineBase()
 	PrimaryActorTick.bCanEverTick = true;
 
 	SplinePath = CreateDefaultSubobject<USplineComponent>(TEXT("SplinePath"));
-	SplinePath->AddSplinePoint(FVector(0.f, 0.f, 10.f), ESplineCoordinateSpace::Type::World);
-	SplinePath->AddSplinePoint(FVector(250.f, 100.f, 10.f), ESplineCoordinateSpace::Type::World);
-	SplinePath->AddSplinePoint(FVector(-100.f, 450.f, 10.f), ESplineCoordinateSpace::Type::World);
 	
 	struct FConstructorStatics
 	{
@@ -21,7 +18,7 @@ ASplineBase::ASplineBase()
 		ConstructorHelpers::FObjectFinder<UMaterialInstanceConstant> MaterialFinder;
 		FConstructorStatics()
 			: MeshFinder(TEXT("StaticMesh'/Engine/EditorLandscapeResources/FlattenPlaneMesh.FlattenPlaneMesh'"))
-			, MaterialFinder(TEXT("MaterialInstanceConstant'/Game/Meterial/Street/StreetInstance.StreetInstance'"))
+			, MaterialFinder(TEXT("MaterialInstanceConstant'/Game/Downtown/Materials/RoadMain_A_Inst.RoadMain_A_Inst'"))
 		{
 		}
 	};
@@ -29,6 +26,19 @@ ASplineBase::ASplineBase()
 	Mesh = ConstructorStatics.MeshFinder.Object;
 	Material = ConstructorStatics.MaterialFinder.Object;
 	
+	
+}
+
+void ASplineBase::OnConstruction(const FTransform& transform) {
+	int oldPoint = SplinePath->GetNumSplinePoints();
+	for (int i = 0; i < oldPoint; i++) {
+		SplinePath->RemoveSplinePoint(0);
+	}
+
+	for (int i = 0; i < SplinePoints.Num(); i++) {
+		SplinePath->AddSplineWorldPoint(SplinePoints[i]);
+	}
+
 	for (int i = 0; i < SplinePath->GetNumberOfSplinePoints() - 1; i++) {
 		USplineMeshComponent* SplineMesh = NewObject<USplineMeshComponent>(SplinePath, USplineMeshComponent::StaticClass());
 		SplineMesh->CreationMethod = EComponentCreationMethod::UserConstructionScript;
