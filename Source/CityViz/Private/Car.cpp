@@ -15,31 +15,12 @@ ACar::ACar()
 	Root = RootComponent;
 
 	UStaticMeshComponent* Body = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Body"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> Mesh(TEXT("/Game/Mesh/Car/free_cartoon_cars_pickup02"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> Mesh(TEXT("StaticMesh'/Game/DownTown/Meshes/Vehicle_A.Vehicle_A'"));
 	if (Mesh.Succeeded()) {
 		Body->SetStaticMesh(Mesh.Object);
+		Body->SetWorldScale3D(FVector(0.1f, 0.1f, 0.1f));
+		Body->AddLocalRotation(FRotator(0.f, 90.f, 0.f));
 		Body->AttachToComponent(RootComponent, FAttachmentTransformRules(EAttachmentRule::KeepRelative, false));
-	}
-
-	UStaticMeshComponent* Wheel3 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Wheel3"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> Mesh2(TEXT("/Game/Mesh/Car/free_cartoon_cars_pickup02_wheel3_001"));
-	if (Mesh2.Succeeded()) {
-		Wheel3->SetStaticMesh(Mesh2.Object);
-		Wheel3->AttachToComponent(RootComponent, FAttachmentTransformRules(EAttachmentRule::KeepRelative, false));
-	}
-
-	UStaticMeshComponent* Wheel2 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Wheel2"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> Mesh3(TEXT("/Game/Mesh/Car/free_cartoon_cars_pickup02_wheel2_001"));
-	if (Mesh3.Succeeded()) {
-		Wheel2->SetStaticMesh(Mesh3.Object);
-		Wheel2->AttachToComponent(RootComponent, FAttachmentTransformRules(EAttachmentRule::KeepRelative, false));
-	}
-
-	UStaticMeshComponent* Wheel1 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Wheel1"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> Mesh4(TEXT("/Game/Mesh/Car/free_cartoon_cars_pickup02_wheel1_001"));
-	if (Mesh4.Succeeded()) {
-		Wheel1->SetStaticMesh(Mesh4.Object);
-		Wheel1->AttachToComponent(RootComponent, FAttachmentTransformRules(EAttachmentRule::KeepRelative, false));
 	}
 
 	CurrentWayPointIndex = 1;
@@ -49,12 +30,6 @@ ACar::ACar()
 void ACar::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	if (WayPoints.Num() > 1) {
-		SetActorLocation(WayPoints[0]);
-		FVector v = GetActorLocation() - WayPoints[1];
-		SetActorRotation(v.Rotation());
-	}
 }
 
 // Called every frame

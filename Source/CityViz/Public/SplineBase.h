@@ -24,6 +24,7 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
+	virtual void ApplySettings(TArray<FVector> points, UStaticMesh* mesh, UMaterialInstanceConstant* mat);
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 

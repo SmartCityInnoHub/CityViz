@@ -3,9 +3,9 @@
 #include "Traffic.h"
 #include "TimerManager.h"
 
-void ATraffic::SetupActor() {
-	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("SceneComp"));
-
+ATraffic::ATraffic() {
+	RootComponent->SetMobility(EComponentMobility::Movable);
+	MeshComponent->SetMobility(EComponentMobility::Movable);
 }
 
 void ATraffic::BeginPlay() {
@@ -28,9 +28,20 @@ void ATraffic::BeginPlay() {
 
 void ATraffic::SpawnCar() {
 	ACar* car = GetWorld()->SpawnActor<ACar>();
-	car->WayPoints = this->PointsBelongToSensor;
 	car->Velocity = Velocity;
 	Cars.Add(car);
 	car->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepWorld, false));
 	car->Root->AddLocalOffset(FVector(100.0f, 0.f, 0.f));
+	car->WayPoints = this->PointsBelongToSensor;
+	car->SetActorLocation(PointsBelongToSensor[0]);
+	FVector v = PointsBelongToSensor[0] - PointsBelongToSensor[1];
+	car->SetActorRotation(v.Rotation());
+}
+
+void ATraffic::ApplySettings(TArray<FVector> node, float carPeriod, float carCount, float carVelocity) {
+	PointsBelongToSensor = node;
+	Period = carPeriod;
+	Count = carCount;
+	Velocity = carVelocity;
+	this->OnConstruction(this->GetTransform());
 }

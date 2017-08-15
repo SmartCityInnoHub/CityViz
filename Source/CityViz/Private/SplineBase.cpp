@@ -10,6 +10,7 @@ ASplineBase::ASplineBase()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 	SplinePath = CreateDefaultSubobject<USplineComponent>(TEXT("SplinePath"));
 	
 	struct FConstructorStatics
@@ -30,7 +31,7 @@ ASplineBase::ASplineBase()
 }
 
 void ASplineBase::OnConstruction(const FTransform& transform) {
-	int oldPoint = SplinePath->GetNumSplinePoints();
+	int oldPoint = SplinePath->GetNumberOfSplinePoints();
 	for (int i = 0; i < oldPoint; i++) {
 		SplinePath->RemoveSplinePoint(0);
 	}
@@ -64,5 +65,12 @@ void ASplineBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void ASplineBase::ApplySettings(TArray<FVector> points, UStaticMesh* mesh, UMaterialInstanceConstant* mat) {
+	SplinePoints = points;
+	Mesh = mesh;
+	Material = mat;
+	this->OnConstruction(this->GetTransform());
 }
 

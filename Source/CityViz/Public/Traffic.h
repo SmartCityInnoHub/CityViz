@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "ActiveElement.h"
 #include "Engine/StaticMesh.h"
+#include "CityVizMapObject.h"
 #include "Car.h"
 #include "Traffic.generated.h"
 
@@ -12,15 +13,17 @@
  * 
  */
 UCLASS()
-class CITYVIZ_API ATraffic : public AActiveElement
+class CITYVIZ_API ATraffic : public ACityVizMapObject
 {
 	GENERATED_BODY()
 
+public:
+	ATraffic();
 protected:
 	virtual void BeginPlay() override;
-	virtual void SetupActor() override;
 
 public:
+	virtual void ApplySettings(TArray<FVector> node, float carPeriod, float carCount, float carVelocity);
 	void SpawnCar();
 
 	UPROPERTY(EditAnywhere)
