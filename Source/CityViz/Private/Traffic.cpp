@@ -36,6 +36,7 @@ void ATraffic::SpawnCar() {
 	car->SetActorLocation(PointsBelongToSensor[0]);
 	FVector v = PointsBelongToSensor[0] - PointsBelongToSensor[1];
 	car->SetActorRotation(v.Rotation());
+	car->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepWorld, false));
 }
 
 void ATraffic::ApplySettings(TArray<FVector> node, float carPeriod, float carCount, float carVelocity) {

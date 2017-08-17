@@ -3,7 +3,7 @@
 #include "Car.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Components/StaticMeshComponent.h"
-
+#include "Materials/MaterialInstanceDynamic.h"
 
 // Sets default values
 ACar::ACar()
@@ -15,13 +15,36 @@ ACar::ACar()
 	Root = RootComponent;
 
 	UStaticMeshComponent* Body = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Body"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> Mesh(TEXT("StaticMesh'/Game/DownTown/Meshes/Vehicle_A.Vehicle_A'"));
-	if (Mesh.Succeeded()) {
-		Body->SetStaticMesh(Mesh.Object);
-		Body->SetWorldScale3D(FVector(0.1f, 0.1f, 0.1f));
-		Body->AddLocalRotation(FRotator(0.f, 90.f, 0.f));
-		Body->AttachToComponent(RootComponent, FAttachmentTransformRules(EAttachmentRule::KeepRelative, false));
-	}
+	struct FConstructorStatics {
+		ConstructorHelpers::FObjectFinder<UStaticMesh> MeshFinder;
+		ConstructorHelpers::FObjectFinder<UMaterial> MatFinder;
+		ConstructorHelpers::FObjectFinder<UTexture> BaseFinder;
+		ConstructorHelpers::FObjectFinder<UTexture> CompactFinder;
+		ConstructorHelpers::FObjectFinder<UTexture> NormalFinder;
+		FConstructorStatics()
+			: MeshFinder(TEXT("StaticMesh'/Game/DownTown/Meshes/Vehicle_A.Vehicle_A'"))
+			, MatFinder(TEXT("Material'/Game/Materials/Car_Mat.Car_Mat'"))
+			, BaseFinder(TEXT("Texture2D'/Game/Downtown/Textures/Vehicle_A_A.Vehicle_A_A'"))
+			, CompactFinder(TEXT("Texture2D'/Game/Downtown/Textures/Vehicle_A_C.Vehicle_A_C'"))
+			, NormalFinder(TEXT("Texture2D'/Game/Downtown/Textures/Vehicle_N.Vehicle_N'"))
+		{}
+	};
+	static FConstructorStatics ConstructorStatics;
+	Body->SetStaticMesh(ConstructorStatics.MeshFinder.Object);
+	Body->SetWorldScale3D(FVector(0.1f, 0.1f, 0.1f));
+	Body->AddLocalRotation(FRotator(0.f, 90.f, 0.f));
+	Body->AttachToComponent(RootComponent, FAttachmentTransformRules(EAttachmentRule::KeepRelative, false));
+
+	matInst = UMaterialInstanceDynamic::Create(ConstructorStatics.MatFinder.Object, Body);
+	matInst->SetTextureParameterValue(FName("Base Color"), ConstructorStatics.BaseFinder.Object);
+	matInst->SetTextureParameterValue("Compact", ConstructorStatics.CompactFinder.Object);
+	matInst->SetTextureParameterValue("Normal", ConstructorStatics.NormalFinder.Object);
+	float red = FMath::RandRange(0.f, 1.);
+	float green = FMath::RandRange(0.f, 1.f);
+	float blue = FMath::RandRange(0.f, 1.f);
+	matInst->SetVectorParameterValue("Tint Color", FLinearColor(red, green, blue, 1.f));
+	Body->SetMaterial(0, matInst);
+
 
 	CurrentWayPointIndex = 1;
 }

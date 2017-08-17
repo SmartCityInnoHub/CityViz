@@ -31,6 +31,9 @@ public:
 	UPROPERTY(EditAnywhere)
 	float Velocity;
 
+	UPROPERTY(EditAnywhere)
+		UMaterialInstanceDynamic* matInst;
+
 	int CurrentWayPointIndex;
 	FVector Offset;
 	USceneComponent* Root;
