@@ -3,18 +3,16 @@
 #include "Car.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Components/StaticMeshComponent.h"
-#include "Materials/MaterialInstanceDynamic.h"
 
 // Sets default values
 ACar::ACar()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("SceneComp"));
 	Root = RootComponent;
 
-	UStaticMeshComponent* Body = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Body"));
+	body = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Body"));
 	struct FConstructorStatics {
 		ConstructorHelpers::FObjectFinder<UStaticMesh> MeshFinder;
 		ConstructorHelpers::FObjectFinder<UMaterial> MatFinder;
@@ -30,21 +28,28 @@ ACar::ACar()
 		{}
 	};
 	static FConstructorStatics ConstructorStatics;
-	Body->SetStaticMesh(ConstructorStatics.MeshFinder.Object);
-	Body->SetWorldScale3D(FVector(0.1f, 0.1f, 0.1f));
-	Body->AddLocalRotation(FRotator(0.f, 90.f, 0.f));
-	Body->AttachToComponent(RootComponent, FAttachmentTransformRules(EAttachmentRule::KeepRelative, false));
+	body->SetStaticMesh(ConstructorStatics.MeshFinder.Object);
+	body->SetWorldScale3D(FVector(0.1f, 0.1f, 0.1f));
+	body->AddLocalRotation(FRotator(0.f, 90.f, 0.f));
+	body->AttachToComponent(RootComponent, FAttachmentTransformRules(EAttachmentRule::KeepRelative, false));
+	
+	matInst = UMaterialInstanceDynamic::Create(ConstructorStatics.MatFinder.Object, body);
+	baseColor = ConstructorStatics.BaseFinder.Object;
+	compact = ConstructorStatics.CompactFinder.Object;
+	normal = ConstructorStatics.NormalFinder.Object;
+}
 
-	matInst = UMaterialInstanceDynamic::Create(ConstructorStatics.MatFinder.Object, Body);
-	matInst->SetTextureParameterValue(FName("Base Color"), ConstructorStatics.BaseFinder.Object);
-	matInst->SetTextureParameterValue("Compact", ConstructorStatics.CompactFinder.Object);
-	matInst->SetTextureParameterValue("Normal", ConstructorStatics.NormalFinder.Object);
+void ACar::OnConstruction(const FTransform& t) {
+
+	matInst->SetTextureParameterValue("Base Color", baseColor);
+	matInst->SetTextureParameterValue("Compact", compact);
+	matInst->SetTextureParameterValue("Normal", normal);
+
 	float red = FMath::RandRange(0.f, 1.);
 	float green = FMath::RandRange(0.f, 1.f);
 	float blue = FMath::RandRange(0.f, 1.f);
 	matInst->SetVectorParameterValue("Tint Color", FLinearColor(red, green, blue, 1.f));
-	Body->SetMaterial(0, matInst);
-
+	body->SetMaterial(0, matInst);
 
 	CurrentWayPointIndex = 1;
 }

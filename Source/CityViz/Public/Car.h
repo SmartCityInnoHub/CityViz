@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Classes/Engine/Texture.h"
+#include "Materials/MaterialInstanceDynamic.h"
 #include "Car.generated.h"
 
 UCLASS()
@@ -21,18 +23,22 @@ protected:
 
 	float wayPointLength;
 
+	UTexture* baseColor;
+	UTexture* compact;
+	UTexture* normal;
+	UStaticMeshComponent* body;
+	UMaterialInstanceDynamic* matInst;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	virtual void OnConstruction(const FTransform& t) override;
 	
 	UPROPERTY(EditAnywhere)
-	TArray<FVector> WayPoints;
+		TArray<FVector> WayPoints;
 
 	UPROPERTY(EditAnywhere)
-	float Velocity;
-
-	UPROPERTY(EditAnywhere)
-		UMaterialInstanceDynamic* matInst;
+		float Velocity;
 
 	int CurrentWayPointIndex;
 	FVector Offset;
