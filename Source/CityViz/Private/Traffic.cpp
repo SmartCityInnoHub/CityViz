@@ -2,10 +2,11 @@
 
 #include "Traffic.h"
 #include "TimerManager.h"
+#include "UObject/ConstructorHelpers.h"
 
 ATraffic::ATraffic() {
+	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 	RootComponent->SetMobility(EComponentMobility::Movable);
-	MeshComponent->SetMobility(EComponentMobility::Movable);
 }
 
 void ATraffic::BeginPlay() {

@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "Infoable.h"
 #include "Classes/Engine/StaticMesh.h"
+#include "Components/PostProcessComponent.h"
+#include "Materials/MaterialInstanceConstant.h"
 #include "GameFramework/Actor.h"
 #include "CityVizMapObject.generated.h"
 
@@ -21,6 +23,9 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void OnConstruction(const FTransform& transform) override;
 	virtual void BeginPlay() override;
+
+	UPostProcessComponent* PostProcessComponent;
+	UMaterialInstanceConstant* OutlinePP;
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 		void Activate();

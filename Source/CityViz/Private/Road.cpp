@@ -15,11 +15,15 @@ void ARoad::OnConstruction(const FTransform& f) {
 	params.bAllowDuringConstructionScript = true;
 	params.Owner = this;
 	if (TrafficRenderer) {
-		TrafficRenderer->ApplySettings(RoadNode, Period, Count, Velocity);
+		TArray<FVector> v3;
+		for (int i = 0; i < RoadNode.Num(); i++) {
+			v3.Add(FVector(RoadNode[i].X, RoadNode[i].Y, RoadNode[i].Z));
+		}
+		TrafficRenderer->ApplySettings(v3, Period, Count, Velocity);
 	}
 	else {
 		TrafficRenderer = GetWorld()->SpawnActor<ATraffic>(params);
-		TrafficRenderer->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepRelative, false));
+		TrafficRenderer->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepWorld, false));
 	}
 
 	if (RoadSpline) {
@@ -27,16 +31,12 @@ void ARoad::OnConstruction(const FTransform& f) {
 	}
 	else {
 		RoadSpline = GetWorld()->SpawnActor<ASplineBase>(params);
-		RoadSpline->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepRelative, false));
+		RoadSpline->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepWorld, false));
 	}
 }
 
 void ARoad::BeginPlay() {
 	Super::BeginPlay();
-
-	RoadSpline = GetWorld()->SpawnActor<ASplineBase>();
-	RoadSpline->ApplySettings(RoadNode, RoadSplineMesh, Material);
-
 	BasicInfoWindow = CreateWidget<UInfoWindow>(GetWorld()->GetFirstPlayerController(), WidgetClass);
 	BasicInfoWindow->Title = Title;
 	BasicInfoWindow->Content = Content;

@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "ActiveElement.h"
 #include "Engine/StaticMesh.h"
-#include "CityVizMapObject.h"
+#include "GameFramework/Actor.h"
 #include "Car.h"
 #include "Traffic.generated.h"
 
@@ -13,7 +13,7 @@
  * 
  */
 UCLASS()
-class CITYVIZ_API ATraffic : public ACityVizMapObject
+class CITYVIZ_API ATraffic : public AActor
 {
 	GENERATED_BODY()
 

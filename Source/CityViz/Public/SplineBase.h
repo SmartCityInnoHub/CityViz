@@ -3,14 +3,16 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+#include "CityVizMapObject.h"
 #include "Classes/Components/SplineComponent.h"
+#include "Classes/Components/SplineMeshComponent.h"
 #include "Classes/Components/StaticMeshComponent.h"
+#include "Classes/Components/PostProcessComponent.h"
 #include "Classes/Materials/MaterialInstanceConstant.h"
 #include "SplineBase.generated.h"
 
 UCLASS()
-class CITYVIZ_API ASplineBase : public AActor
+class CITYVIZ_API ASplineBase : public ACityVizMapObject
 {
 	GENERATED_BODY()
 	
@@ -24,19 +26,24 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
-	virtual void ApplySettings(TArray<FVector> points, UStaticMesh* mesh, UMaterialInstanceConstant* mat);
+	virtual void ApplySettings(TArray<FVector4> points, UStaticMesh* mesh, UMaterialInstanceConstant* mat);
+	virtual void Activate_Implementation() override;
+	virtual void Deactivate_Implementation() override;
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	UPROPERTY(EditAnywhere)
-		USplineComponent* SplinePath;
-	
+		TArray<USplineMeshComponent*> SplineMeshes;
+
 	UPROPERTY(EditAnywhere)
-		UStaticMesh * Mesh;
+		USplineComponent* SplinePath;
+
+	UPROPERTY(EditAnywhere)
+		UStaticMesh* MeshForSpline;
 
 	UPROPERTY(EditAnywhere)
 		UMaterialInstanceConstant* Material;
 
 	UPROPERTY(EditAnywhere)
-		TArray<FVector> SplinePoints;
+		TArray<FVector4> SplinePoints;
 };

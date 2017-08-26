@@ -28,7 +28,7 @@ public:
 	UInfoWindow* BasicInfoWindow;
 
 	UPROPERTY(EditAnywhere, Category="RodeNode")
-		TArray<FVector> RoadNode;
+		TArray<FVector4> RoadNode;
 	UPROPERTY(EditAnywhere, Category="ChildActor")
 		ATraffic* TrafficRenderer;
 	UPROPERTY(EditAnywhere, Category="ChildActor")
